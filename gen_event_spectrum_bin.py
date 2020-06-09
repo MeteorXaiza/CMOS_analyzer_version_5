@@ -3,7 +3,10 @@
 
 import argparse
 
-from my_functions_2 import *
+from xaizalibs.standardlib import *
+from xaizalibs.nplib import *
+from xaizalibs.pltlib import *
+from xaizalibs.CMOSanalyzerlib import *
 
 
 class Manager():
@@ -34,7 +37,6 @@ class Manager():
                 self.config.strEventSpectrumImgFileAbsPath + ' has been saved.')
 
 
-
 class Config():
     def __init__(self):
         self.strEventListFileAbsPath = None
@@ -53,7 +55,7 @@ class Config():
     def genCommandLineArg(self):
         parser = argparse.ArgumentParser(
             description=(
-                'generate BG stats frame file and PH stats file(fits).'))
+                'generate event spectrum bin file (fits).'))
         parser.add_argument(
             '-c', '--config_file', help='config file path (init : None)')
         parser.add_argument(

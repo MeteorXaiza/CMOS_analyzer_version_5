@@ -3,7 +3,10 @@
 
 import argparse
 
-from my_functions_2 import *
+from xaizalibs.standardlib import *
+from xaizalibs.nplib import *
+from xaizalibs.pltlib import *
+from xaizalibs.CMOSanalyzerlib import *
 
 
 class Manager():
@@ -15,8 +18,13 @@ class Manager():
         self.defineBins()
         self.loadFromFrameFileList()
         self.saveFrameSpectrumBinFile()
+        self.saveFrameSpectrumImgFile()
     def saveFrameStatsFile(self):
         if self.config.strOutputFrameStatsFileAbsPath is not None:
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                    self.config.strOutputFrameStatsFileAbsPath)[0],
+                message=True)
             self.config.frameStats.saveAsFrameStatsFile(
                 self.config.strOutputFrameStatsFileAbsPath, message=True)
     def defineBins(self):
@@ -69,9 +77,27 @@ class Manager():
         elif self.config.strOutputFrameStatsFileAbsPath is not None:
             dicAppendixHeader['FSTATS'] = (
                 self.config.strOutputFrameStatsFileAbsPath)
+        mkdirs(
+            genLsStrDirPathAndFileName(
+                self.config.strFrameSpectrumBinFileAbsPath)[0],
+                message=True)
         self.frameSpectrum.saveAsSpectrumBinFile(
             self.config.strFrameSpectrumBinFileAbsPath, message=True,
             dicAppendixHeader=dicAppendixHeader)
+    def saveFrameSpectrumImgFile(self):
+        if self.config.strFrameSpectrumImgFileAbsPath is None:
+            return None
+        setHistFromVal(self.frameSpectrum.arrCnt, self.frameSpectrum.arrBins)
+        plt.xlabel(self.config.strXLabel)
+        plt.ylabel(self.config.strYLabel)
+        plt.yscale(self.config.strYScale)
+        mkdirs(
+            genLsStrDirPathAndFileName(
+                self.config.strFrameSpectrumImgFileAbsPath)[0],
+            message=True)
+        plt.savefig(self.config.strFrameSpectrumImgFileAbsPath)
+        print(
+            self.config.strFrameSpectrumImgFileAbsPath + ' has been saved.')
 
 
 class Config():
@@ -93,12 +119,13 @@ class Config():
         self.tpValidFrameShape = None
         self.strInvalidFrameShapeProcessMode = None
         self.strFrameSpectrumBinFileAbsPath = None
+        self.strFrameSpectrumImgFileAbsPath = None
         self.strOutputFrameStatsFileAbsPath = None
         self.set()
     def genCommandLineArg(self):
         parser = argparse.ArgumentParser(
             description=(
-                'generate BG stats frame file and PH stats file(fits).'))
+                'generate frame spectrum bin file (fits).'))
         parser.add_argument(
             '-c', '--config_file', help='config file path (init : None)')
         parser.add_argument(
@@ -145,8 +172,20 @@ class Config():
             '--invalid_frame_shape_process_mode',
             help='invalid frame shape process mode (init : first)')
         parser.add_argument(
+            '-xl', '--x_label', default='PH [ch]',
+            help='x label of spectrum (init : PH [ch])')
+        parser.add_argument(
+            '-yl', '--y_label', default='intensity [counts/bin]',
+            help='x label of spectrum (init : intensity [counts/bin])')
+        parser.add_argument(
+            '-ys', '--y_scale', default='log',
+            help='y scale of spectrum (init : log)')
+        parser.add_argument(
             '-o', '--frame_spectrum_bin_file',
             help='frame spectrum bin file path(output) (init : None)')
+        parser.add_argument(
+            '-oi', '--frame_spectrum_img_file',
+            help='frame spectrum img file path(output) (init : None)')
         parser.add_argument(
             '-ofs', '--output_frame_stats_file',
             help='frame stats file path(output) (init : None)')
@@ -207,6 +246,15 @@ class Config():
             commandLineArg.invalid_frame_shape_process_mode,
             ['--invalid_frame_shape_process_mode'], dicConfigFile, 'input',
             'invalid_frame_shape_process_mode')
+        strXLabel = getConfig(
+            commandLineArg.x_label, ['-xl', '--x_label'], dicConfigFile,
+            'input', 'x_label')
+        strYLabel = getConfig(
+            commandLineArg.y_label, ['-yl', '--y_label'], dicConfigFile,
+            'input', 'y_label')
+        strYScale = getConfig(
+            commandLineArg.y_scale, ['-ys', '--y_scale'], dicConfigFile,
+            'input', 'y_scale')
         strOutputFrameStatsFilePath = getConfig(
             commandLineArg.output_frame_stats_file,
             ['-ofs', '--output_frame_stats_file'], dicConfigFile, 'output',
@@ -215,6 +263,10 @@ class Config():
             commandLineArg.frame_spectrum_bin_file,
             ['-o', '--frame_spectrum_bin_file'], dicConfigFile, 'output',
             'frame_spectrum_bin_file_path')
+        strFrameSpectrumImgFilePath = getConfig(
+            commandLineArg.frame_spectrum_img_file,
+            ['-oi', '--frame_spectrum_img_file'], dicConfigFile, 'output',
+            'frame_spectrum_img_file_path')
         # self.lsStrFrameFileAbsPath の設定
         if strFrameListFilePath is not None:
             lsStrFrameFilePath = getLsStrTxtLine(
@@ -291,9 +343,15 @@ class Config():
             self.tpValidFrameShape = None
         # self.strInvalidFrameShapeProcessMode の設定
         self.strInvalidFrameShapeProcessMode = strInvalidFrameShapeProcessMode
+        self.strXLabel = strXLabel
+        self.strYLabel = strYLabel
+        self.strYScale = strYScale
         # self.strFrameSpectrumBinFilePath の設定
         self.strFrameSpectrumBinFileAbsPath = self.getStrAbsPath(
             strFrameSpectrumBinFilePath)
+        # self.strFrameSpectrumBinFilePath の設定
+        self.strFrameSpectrumImgFileAbsPath = self.getStrAbsPath(
+            strFrameSpectrumImgFilePath)
         # self.strOutputFrameStatsFilePath の設定
         self.strOutputFrameStatsFileAbsPath = self.getStrAbsPath(
             strOutputFrameStatsFilePath)

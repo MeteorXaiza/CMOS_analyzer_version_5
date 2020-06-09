@@ -105,7 +105,7 @@ class Config():
     def genCommandLineArg(self):
         parser = argparse.ArgumentParser(
             description=(
-                'generate BG stats frame file and PH stats file(fits).'))
+                'generate threshold file (json).'))
         parser.add_argument(
             '-c', '--config_file', help='config file path (init : None)')
         parser.add_argument(

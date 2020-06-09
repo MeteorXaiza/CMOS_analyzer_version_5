@@ -3,7 +3,10 @@
 
 import argparse
 
-from my_functions_2 import *
+from xaizalibs.standardlib import *
+from xaizalibs.nplib import *
+from xaizalibs.pltlib import *
+from xaizalibs.CMOSanalyzerlib import *
 
 
 class Manager():
@@ -64,7 +67,7 @@ class Config():
     def genCommandLineArg(self):
         parser = argparse.ArgumentParser(
             description=(
-                'generate BG stats frame file and PH stats file(fits).'))
+                'generate event list file (fits).'))
         parser.add_argument(
             '-c', '--config_file', help='config file path (init : None)')
         parser.add_argument(
@@ -206,11 +209,11 @@ class Config():
             dicThreshold = getDicJSON(
                 getStrAbsPath(strThresholdFilePath), message=True)
             if self.event_th is None:
-                self.event_th = dicThreshold['event_th']
-                self.strEvent_th = str(self.event_th)
+                self.strEvent_th = str(dicThreshold['event_th'])
+                self.event_th = self.genThreshold(self.strEvent_th)
             if self.split_th is None:
-                self.split_th = dicThreshold['split_th']
-                self.strSplit_th = str(self.split_th)
+                self.strSplit_th = str(dicThreshold['split_th'])
+                self.split_th = self.genThreshold(self.strSplit_th)
         # self.maxLeakの設定
         self.maxLeak = int(strMaxLeak)
         # self.lsStrAppendixFrameFileAbsPath と self.lsArrAppendixFrame の設定
@@ -234,7 +237,7 @@ class Config():
         # self.strEventListFileAbsPath の設定
         self.strEventListFileAbsPath = getStrAbsPath(strEventListFilePath)
     def genThreshold(self, strThreshold):
-        if re.match('\d*\.?\d+', strThreshold) is not None:
+        if re.match('\d*\.?\d*', strThreshold) is not None:
             return float(strThreshold)
         else:
             return getArrFits(getStrAbsPath(strThreshold), message=True)

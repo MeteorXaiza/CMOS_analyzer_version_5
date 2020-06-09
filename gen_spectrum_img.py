@@ -3,7 +3,10 @@
 
 import argparse
 
-from my_functions_2 import *
+from xaizalibs.standardlib import *
+from xaizalibs.nplib import *
+from xaizalibs.pltlib import *
+from xaizalibs.CMOSanalyzerlib import *
 
 
 class Manager():
@@ -25,12 +28,16 @@ class Manager():
                 color = tuple(lsArrColor[cnt])
             else:
                 color = dicSpectrumVal['header']['COLOR']
+            strLabel = dicSpectrumVal['header']['LABEL']
             arrSpectrumVal = dicSpectrumVal['data']
             setHistFromVal(
-                arrSpectrumVal[0,:-1], arrSpectrumVal[1], color=color)
+                arrSpectrumVal[0,:-1], arrSpectrumVal[1], color=color,
+                label=strLabel)
         plt.xlabel(self.config.strXLable)
         plt.ylabel(self.config.strYLabel)
         plt.yscale(self.config.strYScale)
+        if len(self.config.lsStrSpectrumBinFileAbsPath) > 1:
+            setLegend()
         plt.savefig(self.config.strSpectrumImgFileAbsPath)
         print(self.config.strSpectrumImgFileAbsPath + ' has been saved.')
 
@@ -49,7 +56,7 @@ class Config():
     def genCommandLineArg(self):
         parser = argparse.ArgumentParser(
             description=(
-                'generate BG stats frame file and PH stats file(fits).'))
+                'generate spectrum image file (fits).'))
         parser.add_argument(
             '-c', '--config_file', help='config file path (init : None)')
         parser.add_argument(
