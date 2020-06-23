@@ -61,6 +61,9 @@ class Manager():
                     strThresholdMode, tpFrameShape=self.config.tpFrameShape))
         elif lsStrThresholdModeColumn[0] == 'pixel':
             self.dicThreshold[strThresholdKey] = strThresholdFrameFileAbsPath
+            mkdirs(
+                genLsStrDirPathAndFileName(strThresholdFrameFileAbsPath)[0],
+                message=True)
             saveAsFits(
                 self.thresholdManager.genThreshold(
                     strThresholdMode,
@@ -85,6 +88,9 @@ class Manager():
                 + str(self.config.tpFrameShape[1]))
         else:
             self.dicThreshold['frame_shape'] = None
+        mkdirs(
+            genLsStrDirPathAndFileName(self.config.strThresholdFileAbsPath)[0],
+            message=True)
         saveAsJSON(
             self.dicThreshold, self.config.strThresholdFileAbsPath,
             message=True, indent=2)

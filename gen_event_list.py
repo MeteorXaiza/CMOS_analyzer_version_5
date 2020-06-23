@@ -41,6 +41,9 @@ class Manager():
         for cnt in range(len(self.config.lsStrAppendixFrameFileAbsPath)):
             dicAppendixHeader['APF'+str(cnt)] = (
                 self.config.lsStrAppendixFrameFileAbsPath[cnt])
+        mkdirs(
+            genLsStrDirPathAndFileName(self.config.strEventListFileAbsPath)[0],
+            message=True)
         self.eventList.saveAsEventListFile(
             self.config.strEventListFileAbsPath,
             dicAppendixHeader=dicAppendixHeader, message=True)
@@ -237,7 +240,7 @@ class Config():
         # self.strEventListFileAbsPath の設定
         self.strEventListFileAbsPath = getStrAbsPath(strEventListFilePath)
     def genThreshold(self, strThreshold):
-        if re.match('\d*\.?\d*', strThreshold) is not None:
+        if re.match('\d+\.?\d*', strThreshold) is not None:
             return float(strThreshold)
         else:
             return getArrFits(getStrAbsPath(strThreshold), message=True)

@@ -46,30 +46,58 @@ class Manager():
     def saveStatsFrameFile(self):
         dicAppendixHeader = {'EVLIST' : self.config.strEventListFileAbsPath}
         if self.config.strMeanBGFrameFileAbsPath is not None:
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                    self.config.strMeanBGFrameFileAbsPath)[0],
+                message=True)
             self.backGround.saveMeanSignalFrameFile(
                 self.config.strMeanBGFrameFileAbsPath, message=True,
                 dicAppendixHeader=dicAppendixHeader)
         if self.config.strStdBGFrameFileAbsPath is not None:
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                    self.config.strStdBGFrameFileAbsPath)[0],
+                message=True)
             self.backGround.saveStdSignalFrameFile(
                 self.config.strStdBGFrameFileAbsPath, message=True,
                 dicAppendixHeader=dicAppendixHeader)
         if self.config.strSkewnessBGFrameFileAbsPath is not None:
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                    self.config.strSkewnessBGFrameFileAbsPath)[0],
+                message=True)
             self.backGround.saveSkewnessSignalFrameFile(
                 self.config.strSkewnessBGFrameFileAbsPath, message=True,
                 dicAppendixHeader=dicAppendixHeader)
         if self.config.strKurtosisBGFrameFileAbsPath is not None:
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                    self.config.strKurtosisBGFrameFileAbsPath)[0],
+                message=True)
             self.backGround.saveKurtosisSignalFrameFile(
                 self.config.strKurtosisBGFrameFileAbsPath, message=True,
                 dicAppendixHeader=dicAppendixHeader)
         if self.config.strMinBGFrameFileAbsPath is not None:
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                    self.config.strMinBGFrameFileAbsPath)[0],
+                message=True)
             self.backGround.saveMinSignalFrameFile(
                 self.config.strMinBGFrameFileAbsPath, message=True,
                 dicAppendixHeader=dicAppendixHeader)
         if self.config.strMaxBGFrameFileAbsPath is not None:
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                    self.config.strMaxBGFrameFileAbsPath)[0],
+                message=True)
             self.backGround.saveMaxSignalFrameFile(
                 self.config.strMaxBGFrameFileAbsPath, message=True,
                 dicAppendixHeader=dicAppendixHeader)
         if self.config.strCntBGFrameFileAbsPath is not None:
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                    self.config.strCntBGFrameFileAbsPath)[0],
+                message=True)
             self.backGround.saveCntSignalFrameFile(
                 self.config.strCntBGFrameFileAbsPath, message=True,
                 dicAppendixHeader=dicAppendixHeader)
@@ -90,6 +118,10 @@ class Manager():
             dicAppendix['zero_level_frame'] = None
         dicPHStats = self.genDicPHStats()
         dicPHStats['config'] = dicAppendix
+        mkdirs(
+            genLsStrDirPathAndFileName(
+                self.config.strPHStatsFileAbsPath)[0],
+            message=True)
         saveAsJSON(
             dicPHStats, self.config.strPHStatsFileAbsPath, indent=2,
             message=True)

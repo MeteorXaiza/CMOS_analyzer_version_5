@@ -72,7 +72,7 @@ class Config():
             '-yl', '--y_label', default='intensity [counts/bin]',
             help='y label (init : intensity [counts/bin])')
         parser.add_argument(
-            '-ys', '--y_scale',
+            '-ys', '--y_scale', default='log',
             help='y scale (init : log)')
         parser.add_argument(
             '--auto_coloring', default='True',
