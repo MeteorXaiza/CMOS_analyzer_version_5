@@ -120,6 +120,7 @@ class Config():
         self.strInvalidFrameShapeProcessMode = None
         self.strXLabel = None
         self.strYLabel = None
+        self.strYScale = None
         self.strFrameSpectrumBinFileAbsPath = None
         self.strFrameSpectrumImgFileAbsPath = None
         self.strOutputFrameStatsFileAbsPath = None
