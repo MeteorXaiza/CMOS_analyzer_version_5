@@ -118,6 +118,8 @@ class Config():
         self.HDUIndex = None
         self.tpValidFrameShape = None
         self.strInvalidFrameShapeProcessMode = None
+        self.strXLabel = None
+        self.strYLabel = None
         self.strFrameSpectrumBinFileAbsPath = None
         self.strFrameSpectrumImgFileAbsPath = None
         self.strOutputFrameStatsFileAbsPath = None
