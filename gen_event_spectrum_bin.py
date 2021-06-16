@@ -24,6 +24,10 @@ class Manager():
                 'LABEL' : self.config.strLabel,
                 'COLOR' : self.config.strColor,
                 'VALID' : self.config.strValidEventCondition}
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                        self.config.strEventSpectrumBinFileAbsPath
+                    )[0], message=True)
             saveAsFits(
                 arrSpectrumVal, self.config.strEventSpectrumBinFileAbsPath,
                 header=dicHeader, message=True)
@@ -32,6 +36,10 @@ class Manager():
             plt.xlabel(self.config.strXLabel)
             plt.ylabel(self.config.strYLabel)
             plt.yscale(self.config.strYScale)
+            mkdirs(
+                genLsStrDirPathAndFileName(
+                        self.config.strEventSpectrumImgFileAbsPath
+                    )[0], message=True)
             plt.savefig(self.config.strEventSpectrumImgFileAbsPath)
             print(
                 self.config.strEventSpectrumImgFileAbsPath + ' has been saved.')
